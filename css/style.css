@@ -527,6 +527,10 @@ body {
   z-index: 1000;
 }
 
+.overlay[hidden] {
+  display: none;
+}
+
 .overlay__card {
   text-align: center;
   padding: 40px;
