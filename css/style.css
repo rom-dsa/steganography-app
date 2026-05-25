@@ -2,6 +2,10 @@
    StegaCrypt - Modern Steganography UI
    ============================================ */
 
+[hidden] {
+  display: none !important;
+}
+
 :root {
   --bg-primary: #0a0e1a;
   --bg-secondary: #111827;
@@ -81,23 +85,6 @@ body {
 .header__tagline {
   color: var(--text-secondary);
   font-size: 14px;
-}
-
-.header__github {
-  position: absolute;
-  top: 4px;
-  right: 0;
-  color: var(--text-muted);
-  transition: color var(--transition);
-}
-
-.header__github:hover {
-  color: var(--text-primary);
-}
-
-.header__github svg {
-  width: 24px;
-  height: 24px;
 }
 
 /* Tabs */
@@ -527,9 +514,6 @@ body {
   z-index: 1000;
 }
 
-.overlay[hidden] {
-  display: none;
-}
 
 .overlay__card {
   text-align: center;
