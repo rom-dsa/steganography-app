@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StegaCrypt - Steganography Tool</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>" />
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="header__brand">
+        <svg class="header__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="18" height="18" rx="2" />
+          <circle cx="8.5" cy="8.5" r="1.5" />
+          <path d="M21 15l-5-5L5 21" />
+        </svg>
+        <h1 class="header__title">StegaCrypt</h1>
+      </div>
+      <p class="header__tagline">Hide secrets in plain sight</p>
+      <a href="https://github.com/rom-dsa/steganography-app" class="header__github" target="_blank" rel="noopener" title="View on GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+      </a>
+    </header>
+
+    <!-- Mode Tabs -->
+    <nav class="tabs">
+      <button class="tabs__btn tabs__btn--active" data-mode="encode">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+          <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+        </svg>
+        Hide Data
+      </button>
+      <button class="tabs__btn" data-mode="decode">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+          <path d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/>
+        </svg>
+        Extract Data
+      </button>
+    </nav>
+
+    <!-- Encode Panel -->
+    <main id="encode-panel" class="panel">
+      <!-- Data Type Selector -->
+      <div class="type-selector">
+        <button class="type-selector__btn type-selector__btn--active" data-type="text">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/>
+          </svg>
+          Text Message
+        </button>
+        <button class="type-selector__btn" data-type="file">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+            <path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><path d="M13 2v7h7"/>
+          </svg>
+          File
+        </button>
+        <button class="type-selector__btn" data-type="image">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>
+          </svg>
+          Image
+        </button>
+      </div>
+
+      <!-- Carrier Image Upload -->
+      <section class="upload-section">
+        <h2 class="section-title">Carrier Image</h2>
+        <div class="dropzone" id="carrier-dropzone">
+          <svg class="dropzone__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="48" height="48">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>
+          </svg>
+          <p class="dropzone__text">Drop a PNG image here or <span class="dropzone__link">browse</span></p>
+          <p class="dropzone__hint">PNG format recommended for lossless encoding</p>
+          <input type="file" id="carrier-input" accept="image/png,image/bmp" hidden />
+        </div>
+        <div class="preview" id="carrier-preview" hidden>
+          <img id="carrier-img" alt="Carrier preview" />
+          <div class="preview__info">
+            <span id="carrier-name"></span>
+            <span id="carrier-size"></span>
+            <button class="preview__remove" id="carrier-remove" title="Remove">&times;</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Secret Data Input -->
+      <section class="upload-section">
+        <h2 class="section-title">Secret Data</h2>
+
+        <!-- Text input -->
+        <div id="text-input" class="secret-input">
+          <textarea id="secret-text" class="textarea" placeholder="Enter your secret message here..." rows="5"></textarea>
+          <div class="textarea__counter"><span id="char-count">0</span> characters</div>
+        </div>
+
+        <!-- File input -->
+        <div id="file-input" class="secret-input" hidden>
+          <div class="dropzone dropzone--small" id="file-dropzone">
+            <svg class="dropzone__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="36" height="36">
+              <path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><path d="M13 2v7h7"/>
+            </svg>
+            <p class="dropzone__text">Drop any file here or <span class="dropzone__link">browse</span></p>
+            <p class="dropzone__hint">Max size depends on carrier image capacity</p>
+            <input type="file" id="secret-file-input" hidden />
+          </div>
+          <div class="preview preview--file" id="file-preview" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+              <path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><path d="M13 2v7h7"/>
+            </svg>
+            <div class="preview__info">
+              <span id="file-name"></span>
+              <span id="file-size"></span>
+              <button class="preview__remove" id="file-remove" title="Remove">&times;</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Image input -->
+        <div id="image-input" class="secret-input" hidden>
+          <div class="dropzone dropzone--small" id="image-dropzone">
+            <svg class="dropzone__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="36" height="36">
+              <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>
+            </svg>
+            <p class="dropzone__text">Drop an image to hide or <span class="dropzone__link">browse</span></p>
+            <p class="dropzone__hint">The image will be embedded inside the carrier</p>
+            <input type="file" id="secret-image-input" accept="image/*" hidden />
+          </div>
+          <div class="preview" id="secret-image-preview" hidden>
+            <img id="secret-img" alt="Secret image preview" />
+            <div class="preview__info">
+              <span id="secret-image-name"></span>
+              <span id="secret-image-size"></span>
+              <button class="preview__remove" id="secret-image-remove" title="Remove">&times;</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Password (optional) -->
+      <section class="upload-section">
+        <h2 class="section-title">Password <span class="optional">(optional)</span></h2>
+        <div class="password-field">
+          <input type="password" id="encode-password" class="input" placeholder="Add encryption password..." autocomplete="off" />
+          <button class="password-toggle" id="encode-pw-toggle" type="button" title="Toggle visibility">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+            </svg>
+          </button>
+        </div>
+      </section>
+
+      <!-- Capacity Indicator -->
+      <div class="capacity" id="capacity-bar" hidden>
+        <div class="capacity__header">
+          <span>Capacity</span>
+          <span id="capacity-text">0 / 0 bytes</span>
+        </div>
+        <div class="capacity__track">
+          <div class="capacity__fill" id="capacity-fill"></div>
+        </div>
+      </div>
+
+      <!-- Encode Button -->
+      <button class="btn btn--primary" id="encode-btn" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+          <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+        </svg>
+        Encode &amp; Download
+      </button>
+    </main>
+
+    <!-- Decode Panel -->
+    <main id="decode-panel" class="panel" hidden>
+      <section class="upload-section">
+        <h2 class="section-title">Encoded Image</h2>
+        <div class="dropzone" id="decode-dropzone">
+          <svg class="dropzone__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="48" height="48">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>
+          </svg>
+          <p class="dropzone__text">Drop an encoded PNG image here or <span class="dropzone__link">browse</span></p>
+          <p class="dropzone__hint">Upload an image that contains hidden data</p>
+          <input type="file" id="decode-input" accept="image/png" hidden />
+        </div>
+        <div class="preview" id="decode-preview" hidden>
+          <img id="decode-img" alt="Decode preview" />
+          <div class="preview__info">
+            <span id="decode-name"></span>
+            <span id="decode-size"></span>
+            <button class="preview__remove" id="decode-remove" title="Remove">&times;</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Password -->
+      <section class="upload-section">
+        <h2 class="section-title">Password <span class="optional">(if encrypted)</span></h2>
+        <div class="password-field">
+          <input type="password" id="decode-password" class="input" placeholder="Enter decryption password..." autocomplete="off" />
+          <button class="password-toggle" id="decode-pw-toggle" type="button" title="Toggle visibility">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+            </svg>
+          </button>
+        </div>
+      </section>
+
+      <!-- Decode Button -->
+      <button class="btn btn--primary" id="decode-btn" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+          <path d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/>
+        </svg>
+        Extract Hidden Data
+      </button>
+
+      <!-- Result Area -->
+      <div class="result" id="result-area" hidden>
+        <h2 class="section-title">Extracted Data</h2>
+        <div id="result-content"></div>
+      </div>
+    </main>
+
+    <!-- Progress Overlay -->
+    <div class="overlay" id="progress-overlay" hidden>
+      <div class="overlay__card">
+        <div class="spinner"></div>
+        <p class="overlay__text" id="progress-text">Processing...</p>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>All processing happens locally in your browser. No data is sent to any server.</p>
+    </footer>
+  </div>
+
+  <script src="js/steganography.js"></script>
+  <script src="js/crypto.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
